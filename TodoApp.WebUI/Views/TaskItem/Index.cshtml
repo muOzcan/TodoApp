@@ -1,0 +1,51 @@
+﻿@model IEnumerable<TodoApp.Entities.TaskItem>
+
+@{
+    ViewData["Title"] = "Tüm Görevler";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a asp-action="Create" class="btn btn-primary">Yeni Görev Ekle</a>
+
+<style>
+    /* tablo yatay taşmasını engellemek için */
+    .table-fixed {table-layout:fixed;width: 100%;}
+    .desc-cell {max-width:420px; word-break:break-word; vertical-align:top;}
+
+    /* kısa / tam metin görünümü (bootstrap 'd-none' kullanımı) */
+    .short-desc {display:inline-block;}
+    .full-desc {display:inline-block;}
+    .see-more {color: #0d6efd; cursor: pointer; margin-left: .25rem;}
+    .show-less {color: #0d6efd; cursor: pointer; margin-left: .25rem;}
+
+</style>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>Tamamlandı</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model){
+            <tr>
+                <td>@task.Title</td>
+
+                <td class="desc-cell">
+                    @{
+                        // limit: kaç karaktere kadara kısa sayılacak kontrolü
+                        int descLimit = 100;
+                        var desc = task.Description ?? "";
+                        var isLong = desc.Length > descLimit;
+                        var shortDesc = isLong ? desc.Substring(0, descLimit) + "..." : desc;
+                    }
+                    </td>
+
+                <td>@(task.IsCompleted ? "Evet" : "Hayır")</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<TodoApp.Entities.TaskItem>
+
+@{
+    ViewData["Title"] = "Tamamlanmış Görevler";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class ="table table-striped" mt-3>
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model){
+            <tr>
+                <td>@task.Title</td>
+                <td>@task.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>

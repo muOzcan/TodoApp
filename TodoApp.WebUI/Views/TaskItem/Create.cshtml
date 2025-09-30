@@ -1,0 +1,31 @@
+﻿@model TodoApp.Entities.TaskItem
+
+@{
+    ViewData["Title"] = "Yeni Görev Ekle";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Title">Başlık</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group mt2-2">
+        <label asp-for="Description">Açıklama</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-check mt-2">
+        <input asp-for="IsCompleted" class="form-check-input" />
+<label asp-for="IsCompleted" class="form-check-label">Tamamlandı</label>
+    </div>
+    <button type="submit" class="btn btn-success mt-3">Kaydet</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary mt-2">Geri</a>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
