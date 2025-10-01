@@ -18,7 +18,7 @@
     .full-desc {display:inline-block;}
     .see-more {color: #0d6efd; cursor: pointer; margin-left: .25rem;}
     .show-less {color: #0d6efd; cursor: pointer; margin-left: .25rem;}
-
+    .d-none {display: none !important;}
 </style>
 
 <table class="table table-striped mt-3">
@@ -42,6 +42,21 @@
                         var isLong = desc.Length > descLimit;
                         var shortDesc = isLong ? desc.Substring(0, descLimit) + "..." : desc;
                     }
+                    <div id="desc-container-@task.Id">
+                        <!-- Kısa Gösterim (her zaman)-->
+                        <span class="short-desc">@Html.Encode(shortDesc)</span>
+
+                        <!-- Tam Gösterim (başlangıçta gizli)-->
+                        <span id="full-desc-@task.Id" class="full-desc d-none">
+                            @Html.Raw(System.Net.WebUtility.HtmlEncode(desc).Replace("\n", "<br/>"))
+                        </span>
+
+                        @if (isLong){
+                            <!-- Uzun ise "Devamını gör" ve "Daha az göster" linkleri -->
+                            <a href="#" class="see-more" data-id="@task.Id">Devamını Gör...</a>
+                            <a href="#" class="show-less d-none" data-id="@task.Id">Daha az göster</a>
+                        }
+                    </div>
                     </td>
 
                 <td>@(task.IsCompleted ? "Evet" : "Hayır")</td>
@@ -49,3 +64,47 @@
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        document.addEventListener('click', function(e) {
+          // "Devamını gör..." tıklandığında
+          if (e.target && e.target.matches('.see-more')) {
+            e.preventDefault();
+            var id = e.target.getAttribute('data-id');
+            var container = document.getElementById('desc-container-' + id);
+            if (!container) return;
+
+            var shortEl = container.querySelector('.short-desc');
+            var fullEl = container.querySelector('#full-desc-' + id);
+            var seeMore = container.querySelector('.see-more');
+            var showLess = container.querySelector('.show-less');
+
+            if (shortEl) shortEl.classList.add('d-none');
+            if (fullEl) fullEl.classList.remove('d-none');
+            if (seeMore) seeMore.classList.add('d-none');
+            if (showLess) showLess.classList.remove('d-none');
+            return;
+          }
+
+          // "Daha az göster" tıklandığında
+          if (e.target && e.target.matches('.show-less')) {
+            e.preventDefault();
+            var id = e.target.getAttribute('data-id');
+            var container = document.getElementById('desc-container-' + id);
+            if (!container) return;
+
+            var shortEl = container.querySelector('.short-desc');
+            var fullEl = container.querySelector('#full-desc-' + id);
+            var seeMore = container.querySelector('.see-more');
+            var showLess = container.querySelector('.show-less');
+
+            if (shortEl) shortEl.classList.remove('d-none');
+            if (fullEl) fullEl.classList.add('d-none');
+            if (seeMore) seeMore.classList.remove('d-none');
+            if (showLess) showLess.classList.add('d-none');
+            return;
+          }
+        });
+    </script>
+}
